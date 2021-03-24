@@ -10,35 +10,55 @@
     <div class="col-md-12">
       <h2>To do list</h2>          
        <form action="/cards" method="post" class="form-todo">
-        <input type="text" name="newCard" id="newCard" minlength="5" maxlength="20" size="20" required title="Add New to-do list">
-        <input type="submit" value="Add New To Do">
+        <input type="text" name="newCard" id="newCard" minlength="5" maxlength="20" size="20" required title="Name of new task">
+        <input type="submit" value="Add New Task">        
 
       <ul class="list-group mb-4">
         {% for card in cards %}
      
         <li>
 
-          {{ card.listItem.name }}   
+          <h4>{{ card.listItem.name }}   </h4>
+          <table border="1" class="dataframe">
+            <thead>
+              <tr style="text-align: right;">
+                <th>Task</th>
+                <th>Description</th>
+                <th>Due Date</th>
+                <th>Complete</th>
+                <th>Re-do</th>
+                <th>Update</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for cardItem in card.cardList %}
+                <tr>
+                  <td>  {{ cardItem.CardItem.name }}</td>
+                  <td>  <input type="text" value="{{cardItem.CardItem.Description}}" name="Description"></td>
+                  <td>  <input type="date" value="{{cardItem.CardItem.Due}}" name="duedate"></td>
           
-              <div class="col-md-12">
-                      <ul  class="list-group mb-4";>
-                            {% for cardItem in card.cardList %}
-                              <li>                                  
-                               
-                                  {{ cardItem.CardItem.name }}  
-                                  {% if card.idpreviousList != ""  %}
-                                  <a href =  {{ url_for('moveCardDown', idCard = cardItem.CardItem.id, idPreviousList= card.idpreviousList)}}> Previous 
-                                    
-                                  {% endif %}
-                                  
-                                  {% if card.idnextList != ""  %}
-                                  </a> <a href =  {{ url_for('moveCardUp', idCard = cardItem.CardItem.id, idNextList= card.idnextList)}}> Next </a>
-                                
-                                  {% endif %}
-                              </li>        
-                            {% endfor %} 
-                          </ul>
-              </div>
+                  <td> {% if card.idnextList != ""  %}
+                  </a> <a href =  {{ url_for('completeTask', idCard = cardItem.CardItem.id, idNextList= card.idnextList)}}> Complete </a>
+                
+                  {% endif %}</td>
+                  <td>  {% if card.idpreviousList != ""  %}
+                    <a href =  {{ url_for('redoTask', idCard = cardItem.CardItem.id, idPreviousList= card.idpreviousList)}}> Re-do
+                    </a> 
+                      
+                    {% endif %}</td>
+                  <td>
+                    <!--  #TODO posting back object to update the description and due date? -->     
+                  <a href =  {{ url_for('updateTask', idCard = cardItem.CardItem.id, descriptionCard = cardItem.CardItem.Description, duedate = cardItem.CardItem.Due)}}> Update </a> 
+                  <!--  <form action="/cards" method="put" class="form-todo">
+                      <input type="submit" value="Update">       -->       
+                  </td>
+                  
+                    <!--  #TODO be nice to have button to reorder the tasks in the list - updating the postion -->  
+                    <!--  #TODO be nice to delete a task -->       
+                </tr>
+              {% endfor %} 
+            </tbody>
+          </table>
         </li>        
         {% endfor %} 
       </ul>
