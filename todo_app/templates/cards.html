@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% block title %}To-Do App{% endblock %}
+
+{% block content %}
+  <div class="jumbotron">
+    <h1 class="display-4">To-Do App</h1>
+    <p class="lead">Welcome to my To-Do List!</p>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <h2>To do list</h2>          
+       <form action="/cards" method="post" class="form-todo">
+        <input type="text" name="newCard" id="newCard" minlength="5" maxlength="20" size="20" required title="Add New to-do list">
+        <input type="submit" value="Add New To Do">
+
+      <ul class="list-group mb-4">
+        {% for card in cards %}
+     
+        <li>
+
+          {{ card.listItem.name }}   
+          
+              <div class="col-md-12">
+                      <ul  class="list-group mb-4";>
+                            {% for cardItem in card.cardList %}
+                              <li>                                  
+                               
+                                  {{ cardItem.CardItem.name }}  
+                                  {% if card.idpreviousList != ""  %}
+                                  <a href =  {{ url_for('moveCardDown', idCard = cardItem.CardItem.id, idPreviousList= card.idpreviousList)}}> Previous 
+                                    
+                                  {% endif %}
+                                  
+                                  {% if card.idnextList != ""  %}
+                                  </a> <a href =  {{ url_for('moveCardUp', idCard = cardItem.CardItem.id, idNextList= card.idnextList)}}> Next </a>
+                                
+                                  {% endif %}
+                              </li>        
+                            {% endfor %} 
+                          </ul>
+              </div>
+        </li>        
+        {% endfor %} 
+      </ul>
+
+{% endblock %}
