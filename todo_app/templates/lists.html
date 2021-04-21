@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+{% block title %}To-Do App{% endblock %}
+
+{% block content %}
+  <div class="jumbotron">
+    <h1 class="display-4">To-Do App</h1>
+    <p class="lead">Welcome to my To-Do List!</p>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <h2>To Do List</h2>
+      <ul class="list-group mb-4">
+        {% for todoItem in item_view_model.todoList %}
+        <li>
+            {{ todoItem.name }} 
+        </li>        
+        {% endfor %} 
+      </ul>
+      
+      <h2>Doing</h2>
+      <ul class="list-group mb-4">
+        {% for doingItem in item_view_model.doingList %}
+        <li>
+            {{ doingItem.name }} 
+        </li>        
+        {% endfor %} 
+      </ul>      
+      <div id ="show_hide_all_done" name ="show_hide_all_done">{{ item_view_model.show_hide_all_done}}  </div>      
+      <div id ="show_hide_all_done" name ="show_hide_all_done">{{ item_view_model.toggle_all_done}}  </div>      
+      {% if item_view_model.show_hide_all_done == True %}
+        <h2>Done</h2>
+         <ul class="list-group mb-4" id="all">      
+          {% for doneItem in item_view_model.show_all_done_items %}
+          <li>
+              {{ doneItem.name }} 
+          </li>        
+          {% endfor %} 
+        </ul>     
+        
+      {% endif %} 
+      {% if item_view_model.show_hide_all_done == False %}
+      <h2>Done Today</h2>
+          {% if item_view_model.toggle_all_done != True %}
+            <form action="/showMore" method="post" class="form-todo">
+              <input type="submit" value="Show More">
+          </form>    
+
+          {% endif %}    
+          <ul class="list-group mb-4" id="today">
+              
+            {% for doneItem in item_view_model.recent_done_items %}
+            <li>
+                {{ doneItem.name }} 
+            </li>        
+            {% endfor %} 
+          </ul>        
+
+          {% if item_view_model.toggle_all_done == True %}
+          <h2>Done Before Today</h2>
+            <ul class="list-group mb-4" id="today">
+              <form action="/showLess" method="post" class="form-todo">
+                <input type="submit" value="Show less">
+            </form>    
+              {% for doneItem in item_view_model.older_done_items %}
+              <li>
+                  {{ doneItem.name }} 
+              </li>        
+              {% endfor %} 
+            </ul>             
+          {% endif %}   
+      {% endif %}    
+    </div>
+  </div>
+{% endblock %}
+<script>
+  $(document).ready(function() {
+   $('.toggle').click(function() {
+    var current_status = $('.toggle').text();
+   });
+ });
+ </script>

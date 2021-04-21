@@ -4,22 +4,65 @@ from todo_app.model.trellomodel import *
 from todo_app.trelloApiCalls import *
 
 import requests, logging
+from datetime import datetime
 
 app = Flask(__name__)
 app.config.from_object(Config)
 log = logging.getLogger(__name__)
 
 
+
+
+#module 3 
+
+@app.route('/showMore', methods=['POST'])
+def show_more():
+
+    todoList = get_cards_on_lists("6050cee9111302705ff69917")
+    doingList = get_cards_on_lists("6050cee9111302705ff69918")
+    doneList = get_cards_on_lists("6050cee9111302705ff69919")
+
+    item_view_model = NewBoardListClass(todoList, doingList, doneList)
+    item_view_model.show_hide_all_done = False
+    item_view_model.toggle_all_done = True
+    return render_template('lists.html', item_view_model = item_view_model)
+
+@app.route('/showLess', methods=['POST'])
+def show_less():
+
+    todoList = get_cards_on_lists("6050cee9111302705ff69917")
+    doingList = get_cards_on_lists("6050cee9111302705ff69918")
+    doneList = get_cards_on_lists("6050cee9111302705ff69919")
+
+    item_view_model = NewBoardListClass(todoList, doingList, doneList)
+    item_view_model.show_all_done = False
+    item_view_model.toggle_all_done = False
+    return render_template('lists.html', item_view_model = item_view_model)
+
 @app.route('/')
+def get_trello_lists():
+    
+    #get list id by name, ideally would like to retrieve Id by name fro, response but no time so hard=coded below
+    #boardLists = []
+    #results = GetListsOnBoard()
+
+    todoList = get_cards_on_lists("6050cee9111302705ff69917")
+    doingList = get_cards_on_lists("6050cee9111302705ff69918")
+    doneList = get_cards_on_lists("6050cee9111302705ff69919")
+  
+    item_view_model = NewBoardListClass(todoList, doingList, doneList)
+    return render_template('lists.html', item_view_model = item_view_model)
+
+@app.route('/module2')
 def cards():
 
     boardLists = []
-    results = GetListsOnBoard()
+    results = get_lists_on_board()
 
     for index, boardListItem in enumerate(results): 
        
         cardsLists = []
-        responseCards = GetCardsonBoard(boardListItem["id"])
+        responseCards = get_cards_on_board(boardListItem["id"])
 
         #default ordering by position (as per created sequence)
         for cardItem in responseCards: 
@@ -45,14 +88,14 @@ def cards():
 @app.route('/cards', methods=['POST'])
 def addCard():
     newCard = request.form['newCard']
-    AddCardtoFirstList(newCard)
+    add_card_to_first_list(newCard)
 
     return redirect('/')
 
 @app.route('/cards/moveCardUp/<idCard>/<idNextList>') 
 def completeTask( idCard, idNextList):   
 
-    MoveCard(idCard, idNextList)
+    move_card(idCard, idNextList)
 
     return redirect('/')
 
@@ -60,7 +103,7 @@ def completeTask( idCard, idNextList):
 @app.route('/cards/moveCardUp/<idCard>/<idPreviousList>') 
 def redoTask( idCard, idPreviousList):   
 
-    MoveCard(idCard, idPreviousList)
+    move_card(idCard, idPreviousList)
 
     return redirect('/')
 
@@ -69,7 +112,7 @@ def redoTask( idCard, idPreviousList):
 def updateTask( idCard, descriptionCard, duedate):  
 
     log.info(descriptionCard)
-    UpdateCard(idCard, descriptionCard, duedate)
+    update_card(idCard, descriptionCard, duedate)
 
     return redirect('/')
 

@@ -5,7 +5,8 @@ import requests, logging
 
 log = logging.getLogger(__name__)
 
-def GetListsOnBoard():
+
+def get_lists_on_board():
     secrets = file_read("todo_app\secrets.txt")
     boardId = secrets[0]
     key =  secrets[1] 
@@ -30,7 +31,7 @@ def GetListsOnBoard():
 
     return response.json()
 
-def GetCardsonBoard(idList):
+def get_cards_on_board(idList):
     secrets = file_read("todo_app\secrets.txt")
     boardId = secrets[0]
     key =  secrets[1] 
@@ -55,13 +56,13 @@ def GetCardsonBoard(idList):
 
     return responseCards.json()
 
-def AddCardtoFirstList(newCard):
+def add_card_to_first_list(newCard):
     secrets = file_read("todo_app\secrets.txt")
     boardId = secrets[0]
     key =  secrets[1] 
     token = secrets[2]   
 
-    listsonBoard = GetListsOnBoard()
+    listsonBoard = get_lists_on_board()
 
     idList = listsonBoard[0]["id"]
 
@@ -79,8 +80,10 @@ def AddCardtoFirstList(newCard):
         params=query
     )
 
+    return response.json()
+
 #TODO be good to change position so appear moved to bottom of list
-def MoveCard(idCard, idList):
+def move_card(idCard, idList):
     secrets = file_read("todo_app\secrets.txt")
     boardId = secrets[0]
     key =  secrets[1] 
@@ -107,7 +110,7 @@ def MoveCard(idCard, idList):
 
 
 #TODO be good to update entire object as per on page
-def UpdateCard(idCard, description, duedate):
+def update_card(idCard, description, duedate):
     secrets = file_read("todo_app\secrets.txt")
     boardId = secrets[0]
     key =  secrets[1] 
@@ -140,3 +143,29 @@ def file_read(fname):
                         content_array.append(line.rstrip())
         
         return content_array
+
+#Module 4
+def get_cards_on_lists(idList):
+    secrets = file_read("todo_app\secrets.txt")
+    boardId = secrets[0]
+    key =  secrets[1] 
+    token = secrets[2]   
+
+    url = 'https://api.trello.com/1/lists/{0}/cards'
+
+    headers = {
+    "Accept": "application/json"
+    }
+
+    query = {
+        'key': key,
+        'token': token
+    } 
+    
+    response = requests.request(
+        "GET",
+        url.format(idList),
+        params=query
+    )
+
+    return response.json()
