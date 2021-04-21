@@ -31,6 +31,15 @@ class CardListItem:
     def CardItem(self):
         return self._CardItem
 
+
+#needed for unit test
+class ItemClass:
+    def __init__(self, id, dateLastActivity, name):
+        self._id = id
+        self._dateLastActivity = dateLastActivity
+        self._name = name
+
+
 #Module3
 class NewBoardListClass:
     locale.setlocale(locale.LC_ALL, 'en_GB')
@@ -38,10 +47,10 @@ class NewBoardListClass:
     def __init__(self, todoList, doingList, doneList):
         self._todoList = todoList
         self._doingList = doingList
-        self._show_all_done_items = doneList
+        self._all_done_items = doneList
         self._recent_done_items =  filter(lambda item: True if datetime.strptime(item["dateLastActivity"], "%Y-%m-%dT%H:%M:%S.%fZ").date() == datetime.now().date() else False, doneList)             
         self._older_done_items =  filter(lambda item: False if datetime.strptime(item["dateLastActivity"], "%Y-%m-%dT%H:%M:%S.%fZ").date() == datetime.now().date() else True, doneList)              
-        if sum(1 for i in self._show_all_done_items) > 5:
+        if sum(1 for i in self._all_done_items) > 5:
            self._show_hide_all_done = False        
         else:
             self._show_hide_all_done = True
@@ -54,18 +63,15 @@ class NewBoardListClass:
     def doingList(self):
         return self._doingList
     @property
-    def show_all_done_items(self):
-        return self._show_all_done_items        
+    def all_done_items(self):
+        return self._all_done_items        
 
     @property
     def recent_done_items(self):
-        #i = sum(1 for i in unordered_list if i % 2 == 0)
-       # return filter(lambda item: True if datetime.strptime(item["dateLastActivity"], "%Y-%m-%dT%H:%M:%S.%fZ").date() == datetime.now().date() else False, self._doneList)     
         return self._recent_done_items     
     @property
     def older_done_items(self): 
-       # return filter(lambda item: False if datetime.strptime(item["dateLastActivity"], "%Y-%m-%dT%H:%M:%S.%fZ").date() ==  datetime.now().date()  else True, self._doneList)     
-        return self._older_done_items  
+       return self._older_done_items  
 
     @property
     def show_hide_all_done(self):         

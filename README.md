@@ -67,5 +67,5 @@ Any issues please let me know
 ## Project Module 3 - Tests
 
 ## Unit tests
-Unit tests > tests folder> test_todo.py
+tests > test_todo_unittest.py
 Run in test explorer

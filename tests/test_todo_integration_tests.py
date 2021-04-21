@@ -1,7 +1,10 @@
-from todo_app.model.trellomodel import NewBoardListClass
+from todo_app.model.trellomodel import NewBoardListClass, ItemClass
 from todo_app.trelloApiCalls import move_card, get_cards_on_lists, add_card_to_first_list
 
-def test_todoListsModel():
+from datetime import datetime
+import locale
+
+def test_todoLists_integration_test():
 
     # Arrange 
     #TODO if more time getting the lists dynamics rather than hard coding id
@@ -15,8 +18,7 @@ def test_todoListsModel():
     # Assert
     assert boardList.todoList == todoList
     assert boardList.doingList == doingList
-    assert boardList.show_all_done_items == doneList
-
+    assert boardList.all_done_items == doneList
 
 def test_todoLists():
 
@@ -50,8 +52,8 @@ def test_doneLists():
     # Act
     boardList = NewBoardListClass(todoList, doingList, doneList)
  
-    allDoneCount = sum(1 for i in boardList.allDone)
-    todaysCount = sum(1 for i in boardList.recent_done_item)
+    allDoneCount = sum(1 for i in boardList.all_done_items)
+    todaysCount = sum(1 for i in boardList.recent_done_items)
     befoeTodayCount = sum(1 for i in boardList.older_done_items)
 
     # Assert
