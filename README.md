@@ -65,3 +65,7 @@ If I have more time, would have been nice to review variable naming, use global 
 Any issues please let me know
 
 ## Project Module 3 - Tests
+
+## Unit tests
+Unit tests > tests folder> test_todo.py
+Run in test explorer

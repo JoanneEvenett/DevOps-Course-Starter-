@@ -58,7 +58,7 @@ class NewBoardListClass:
         return self._show_all_done_items        
 
     @property
-    def recent_done_item(self):
+    def recent_done_items(self):
         #i = sum(1 for i in unordered_list if i % 2 == 0)
        # return filter(lambda item: True if datetime.strptime(item["dateLastActivity"], "%Y-%m-%dT%H:%M:%S.%fZ").date() == datetime.now().date() else False, self._doneList)     
         return self._recent_done_items     
