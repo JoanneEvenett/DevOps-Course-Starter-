@@ -50,3 +50,33 @@ You should see output similar to the following:
  * Debugger PIN: 226-556-590
 ```
 Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser to view the app.
+
+## Project Module 2 - Integrating with an API
+
+To setup you will require a text file name secrets.txt. In here place the id of your board, key and secret on each line
+e.g.
+11111111111
+22222222222
+33333333333
+
+Unfortunately un-finished - updating the description and due date of a task (card)
+If I have more time, would have been nice to review variable naming, use global variables where reused, format table in html. Use bootstrap. Add more logging
+
+Any issues please let me know
+
+## Project Module 3 - Tests
+Have simplied solution since Module 2, to focus on the exercise. Such as
+created new list.html and respective methods, omitted functionality to add item and move items across lanes
+
+# Unit tests
+tests > test_todo_unittest.py
+Run in test explorer
+
+# integration tests
+WIP - only tested the first test
+integration tests > test_todo_integrationtest.py
+Run in test explorer
+
+
+# end to end
+WIP - only managed to set up to test with selenium
