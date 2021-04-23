@@ -6,6 +6,7 @@
     <h1 class="display-4">To-Do App</h1>
     <p class="lead">Welcome to my To-Do List!</p>
   </div>
+  
   <div class="row">
     <div class="col-md-12">
       <h2>To Do List</h2>
@@ -25,12 +26,10 @@
         </li>        
         {% endfor %} 
       </ul>      
-      <div id ="show_hide_all_done" name ="show_hide_all_done">{{ item_view_model.show_hide_all_done}}  </div>      
-      <div id ="show_hide_all_done" name ="show_hide_all_done">{{ item_view_model.toggle_all_done}}  </div>      
       {% if item_view_model.show_hide_all_done == True %}
         <h2>Done</h2>
          <ul class="list-group mb-4" id="all">      
-          {% for doneItem in item_view_model.show_all_done_items %}
+          {% for doneItem in item_view_model.all_done_items %}
           <li>
               {{ doneItem.name }} 
           </li>        

@@ -65,7 +65,18 @@ If I have more time, would have been nice to review variable naming, use global 
 Any issues please let me know
 
 ## Project Module 3 - Tests
+Have simplied solution since Module 2, to focus on the exercise. Such as
+created new list.html and respective methods, omitted functionality to add item and move items across lanes
 
-## Unit tests
+# Unit tests
 tests > test_todo_unittest.py
 Run in test explorer
+
+# integration tests
+WIP - only tested the first test
+integration tests > test_todo_integrationtest.py
+Run in test explorer
+
+
+# end to end
+WIP - only managed to set up to test with selenium

@@ -56,6 +56,55 @@ def get_cards_on_board(idList):
 
     return responseCards.json()
 
+
+def create_trello_board(name):#havent checked this works
+    secrets = file_read("todo_app\secrets.txt")
+    boardId = secrets[0]
+    key =  secrets[1] 
+    token = secrets[2]
+
+    log.info(boardId)
+    log.info(key)
+    log.info(token)#
+    urlCards = "https://api.trello.com/1/boards" 
+
+    queryCards = {
+        'key': key,
+        'token': token
+    }
+
+    responseCards = requests.request(
+        "POST",
+        urlCards,
+        params=queryCards,
+    )
+
+    return responseCards.json()
+
+def delete_trello_board(boardId):#havent checked this works
+    secrets = file_read("todo_app\secrets.txt")
+    boardId = secrets[0]
+    key =  secrets[1] 
+    token = secrets[2]
+
+    log.info(boardId)
+    log.info(key)
+    log.info(token)
+    urlCards = "https://api.trello.com/boards/{0}" 
+
+    queryCards = {
+        'key': key,
+        'token': token
+    }
+
+    responseCards = requests.request(
+        "DELETE",
+        urlCards,
+        params=queryCards
+    )
+
+    return responseCards.json()
+
 def add_card_to_first_list(newCard):
     secrets = file_read("todo_app\secrets.txt")
     boardId = secrets[0]

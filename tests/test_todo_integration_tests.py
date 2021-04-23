@@ -1,60 +1,48 @@
-from todo_app.model.trellomodel import NewBoardListClass, ItemClass
-from todo_app.trelloApiCalls import move_card, get_cards_on_lists, add_card_to_first_list
 
-from datetime import datetime
-import locale
+import pytest
+import dotenv
+from requests.api import patch
+from todo_app.app import create_app as create_app
+from unittest.mock import *
 
-def test_todoLists_integration_test():
+@pytest.fixture
+def client():
+    # Use our test integration config instead of the 'real' version
+    file_path = dotenv.find_dotenv('.env.test')
+    dotenv.load_dotenv(file_path, override=True)
+    # Create the new app.
+    test_app = create_app()
+    # Use the app to create a test_client that can be used in our tests.
+    with test_app.test_client() as client:
+        yield client
 
-    # Arrange 
-    #TODO if more time getting the lists dynamics rather than hard coding id
-    todoList = get_cards_on_lists("6050cee9111302705ff69917")
-    doingList = get_cards_on_lists("6050cee9111302705ff69918")
-    doneList = get_cards_on_lists("6050cee9111302705ff69919")
+def test_loading_page(client):
+    res = client.get('/')
+    assert res.status_code == 200
 
-    # Act
-    boardList = NewBoardListClass(todoList, doingList, doneList)
 
-    # Assert
-    assert boardList.todoList == todoList
-    assert boardList.doingList == doingList
-    assert boardList.all_done_items == doneList
+#Haven't check if the next ones actually work - no time
+@patch('requests.get')
+def test_get_list(mock_get_requests, client):
+    mock_get_requests.side_effect = mock_get_lists("https://api.trello.com/1/boards/6050cee9111302705ff69916/lists")#ideally would read Id from the secrets file
+    response = client.get('/')           
+    assert response.status_code == 200
+      
+def mock_get_lists(url):
+    if url == f'https://api.trello.com/1/boards/6050cee9111302705ff69916/lists':
+        response = Mock()
+    # sample_trello_lists_response should point to some test response data
+        response.json.return_value = '[{ "id": "4", "dateLastActivity": "2021-04-20T12:49:00.329Z", "name": "test"}]'
+        return response
+    elif url == f'https://api.trello.com/1/boards/6050cee9111302705ff69916/lists':
+        response = Mock()
+    # sample_trello_lists_response should point to some test response data
+        response.json.return_value = '[{ "id": "4", "dateLastActivity": "2021-04-20T12:49:00.329Z", "name": "test"}]'
+        return response
+    return None
 
-def test_todoLists():
-
-    # Arrange  
-    beforetodoList = get_cards_on_lists("6050cee9111302705ff69917") 
-
-    newCard = add_card_to_first_list("newCard")
-
-    todoList = get_cards_on_lists("6050cee9111302705ff69917")
-    doingList = get_cards_on_lists("6050cee9111302705ff69918")
-    doneList = get_cards_on_lists("6050cee9111302705ff69919")
-
-    # Act
-    boardList = NewBoardListClass(todoList, doingList, doneList)
-    
-    beforeCount = sum(1 for i in beforetodoList)
-    afterCount = sum(1 for i in boardList.todoList)
-
-    # Assert
-    assert boardList.todoList == todoList
-    assert afterCount == (beforeCount + 1)
-    
-    #Mock this or run a tidy up to remove above created card
-def test_doneLists():
-
-    # Arrange
-    todoList = get_cards_on_lists("6050cee9111302705ff69917")
-    doingList = get_cards_on_lists("6050cee9111302705ff69918")
-    doneList = get_cards_on_lists("6050cee9111302705ff69919")
-
-    # Act
-    boardList = NewBoardListClass(todoList, doingList, doneList)
- 
-    allDoneCount = sum(1 for i in boardList.all_done_items)
-    todaysCount = sum(1 for i in boardList.recent_done_items)
-    befoeTodayCount = sum(1 for i in boardList.older_done_items)
-
-    # Assert
-    assert allDoneCount == todaysCount + befoeTodayCount
+@patch('requests.get')
+def test_get_list_done(mock_get_requests, client):
+    mock_get_requests.side_effect = mock_get_lists("https://api.trello.com/1/boards/6050cee9111302705ff69916/lists")
+    response = client.get('/')           
+    assert response.status_code == 200  
