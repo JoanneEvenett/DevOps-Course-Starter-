@@ -4,15 +4,22 @@
 {% block content %}
   <div class="jumbotron">
     <h1 class="display-4">To-Do App</h1>
-    <p class="lead">Just another to-do app.</p>
+    <p class="lead">Welcome to my To-Do List!</p>
   </div>
-
   <div class="row">
     <div class="col-md-12">
       <h2>Items</h2>
       <ul class="list-group mb-4">
-        <!-- List the todo items here -->
+        {% for item in items %}
+        <li>
+            {{ item.name }} 
+        </li>        
+        {% endfor %} 
       </ul>
+      
+  <form action="/items" method="post" class="form-todo">
+      <input type="text" name="newCard" id="newCard" minlength="5" maxlength="20" size="20" required title="Add name of new to-do list">
+      <input type="submit" value="Add New To Do List">
     </div>
   </div>
 {% endblock %}
